@@ -10,7 +10,7 @@ describe('PrismaParser', () => {
     const tree = parser.print(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
-  it('Identify reference type column correctly', async () => {
+  it('Identifies reference type column correctly', async () => {
     const schema = `
     model User {
       id     Int @id
@@ -25,7 +25,7 @@ describe('PrismaParser', () => {
     const tree = parser.print(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
-  it('Identify multiple columns', async () => {
+  it('Identifies multiple columns', async () => {
     const schema = `
     model User {
       id     Int @id
@@ -36,7 +36,7 @@ describe('PrismaParser', () => {
     expect(tree).toMatchSnapshot()
   })
 
-  it('Identify optional columns', async () => {
+  it('Identifies optional columns', async () => {
     const schema = `
     model User {
       id     Int @id
