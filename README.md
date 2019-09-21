@@ -15,14 +15,18 @@
 
 ```
 model User {
-  id         Int       @id
-  email      String    @unique
-  posts      Post[]
-  updatedAt  DateTime  @updatedAt
+  id     Int @id
+  name   String
+  email  String
+  age    Int?
+  posts  Post[]
 }
+
 model Post {
-  id Int @id
-  text String
+  id       Int @id
+  title    String
+  content  String
+  author   User
 }
 ```
 
@@ -33,52 +37,109 @@ model Post {
     "type": "PrismaQL",
     "models": [
         {
-            "type": "model",
+            "type": "Model",
             "name": "User",
             "columns": [
                 {
                     "type": "Column",
                     "name": "id",
-                    "meta": "Int",
+                    "data_type": {
+                        "name": "Int",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false,
                     "primaryKey": true
                 },
                 {
                     "type": "Column",
-                    "name": "email",
-                    "meta": "String",
-                    "unique": true
-                },
-                {
-                    "type": "foreignKeyColumn",
-                    "name": "posts",
-                    "reference": "Post"
+                    "name": "name",
+                    "data_type": {
+                        "name": "String",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false
                 },
                 {
                     "type": "Column",
-                    "name": "updatedAt",
-                    "meta": "DateTime",
-                    "updatedAt": true
+                    "name": "email",
+                    "data_type": {
+                        "name": "String",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false
+                },
+                {
+                    "type": "Column",
+                    "name": "age",
+                    "data_type": {
+                        "name": "Int",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": true,
+                    "multiple": false
+                },
+                {
+                    "type": "Column",
+                    "name": "posts",
+                    "data_type": {
+                        "name": "Post",
+                        "type": "ReferenceType"
+                    },
+                    "optional": false,
+                    "multiple": true
                 }
             ]
         },
         {
-            "type": "model",
+            "type": "Model",
             "name": "Post",
             "columns": [
                 {
                     "type": "Column",
                     "name": "id",
-                    "meta": "Int",
+                    "data_type": {
+                        "name": "Int",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false,
                     "primaryKey": true
                 },
                 {
                     "type": "Column",
-                    "name": "text",
-                    "meta": "String"
+                    "name": "title",
+                    "data_type": {
+                        "name": "String",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false
+                },
+                {
+                    "type": "Column",
+                    "name": "content",
+                    "data_type": {
+                        "name": "String",
+                        "type": "PrimitiveType"
+                    },
+                    "optional": false,
+                    "multiple": false
+                },
+                {
+                    "type": "Column",
+                    "name": "author",
+                    "data_type": {
+                        "name": "User",
+                        "type": "ReferenceType"
+                    },
+                    "optional": false,
+                    "multiple": false
                 }
             ]
         }
     ]
 }
-
 ```
