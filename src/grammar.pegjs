@@ -72,8 +72,8 @@ DatasourceItem
 
 
 Declaration
- = _? left: Word _? DeclarationIdentifier _? right: (String / Boolean) _? nl*
- {
+ = _? left: Word _? DeclarationIdentifier _? right: (Boolean / String) _? nl*
+{
    return {
      name: left,
      init: {
@@ -135,7 +135,8 @@ String
  { return chars.join("") }
 
 Boolean
- = "true" / "false"
+ = b:("true" / "false")
+ { return b === "true" }
 
 Name
  = AlphanumericWord
