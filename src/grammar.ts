@@ -29,7 +29,7 @@ Start
  = ModelList
 
 ModelList
- = nl* _? m:ModelItem*
+ = nl* m:ModelItem*
    {
    validateTypes(m)
    return {
@@ -39,13 +39,13 @@ ModelList
  }
 
 ModelItem
- = p:Prefix _ n:Name _ ScopeStart nl* c:Column* ScopeEnd nl*
+ = _? p:Prefix _ n:Name _ ScopeStart nl* c:Column* ScopeEnd nl* _?
  {
    return { type: p, name: n, columns: c };
  }
 
 Column
- = _ n: Name _ m: DataType l: ListIdentifier? o:Optional? _? p: Properties? nl*
+ = _? n: Name _ m: DataType l: ListIdentifier? o:Optional? _? p: Properties? _? nl*
    {
    const properties = Object.assign({}, ...(p || []))
    return { type: 'Column', name:  n, data_type: m, optional: !!o, multiple: !!l, ...properties } 
@@ -103,11 +103,14 @@ PropertyIdentifier
 Letter
  = [a-zA-Z]
 
-nl "New line"
- = \"\\n\"
+nl
+  = \"\\n\"
+  / \"\\r\\n\"
+  / \"\\r\"
+  / \"\\f\"
 
 ws "Whitespace"
- = [ \\t]
+ = [ \\t\\r\\n\\f]
 
 _ "One or more whitespaces"
  = ws+

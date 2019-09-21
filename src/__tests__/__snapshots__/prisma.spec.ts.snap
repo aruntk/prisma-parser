@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrismaParser Identify multiple columns 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"models\\": [
+        {
+            \\"type\\": \\"model\\",
+            \\"name\\": \\"User\\",
+            \\"columns\\": [
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"id\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Int\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false,
+                    \\"primaryKey\\": true
+                },
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"name\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"String\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": true
+                }
+            ]
+        }
+    ]
+}"
+`;
+
+exports[`PrismaParser Identify optional columns 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"models\\": [
+        {
+            \\"type\\": \\"model\\",
+            \\"name\\": \\"User\\",
+            \\"columns\\": [
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"id\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Int\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false,
+                    \\"primaryKey\\": true
+                },
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"name\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"String\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": true,
+                    \\"multiple\\": false
+                }
+            ]
+        }
+    ]
+}"
+`;
+
+exports[`PrismaParser Identify reference type column correctly 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"models\\": [
+        {
+            \\"type\\": \\"model\\",
+            \\"name\\": \\"User\\",
+            \\"columns\\": [
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"id\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Int\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false,
+                    \\"primaryKey\\": true
+                },
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"posts\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Post\\",
+                        \\"type\\": \\"ReferenceType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false
+                }
+            ]
+        },
+        {
+            \\"type\\": \\"model\\",
+            \\"name\\": \\"Post\\",
+            \\"columns\\": [
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"id\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Int\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false,
+                    \\"primaryKey\\": true
+                },
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"author\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"User\\",
+                        \\"type\\": \\"ReferenceType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false
+                }
+            ]
+        }
+    ]
+}"
+`;
+
+exports[`PrismaParser Parses model and primitive type columns correctly 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"models\\": [
+        {
+            \\"type\\": \\"model\\",
+            \\"name\\": \\"User\\",
+            \\"columns\\": [
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"id\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"Int\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false,
+                    \\"primaryKey\\": true
+                },
+                {
+                    \\"type\\": \\"Column\\",
+                    \\"name\\": \\"name\\",
+                    \\"data_type\\": {
+                        \\"name\\": \\"String\\",
+                        \\"type\\": \\"PrimitiveType\\"
+                    },
+                    \\"optional\\": false,
+                    \\"multiple\\": false
+                }
+            ]
+        }
+    ]
+}"
+`;
