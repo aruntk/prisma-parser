@@ -47,7 +47,6 @@ describe('PrismaParser', () => {
     expect(tree).toMatchSnapshot()
   })
 
-
   it('Throws error if reference type is undefined', async () => {
     const schema = `
     model User {
