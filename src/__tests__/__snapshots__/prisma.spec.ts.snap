@@ -3,6 +3,8 @@
 exports[`PrismaParser Identify multiple columns 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [],
+    \\"generators\\": [],
     \\"models\\": [
         {
             \\"type\\": \\"model\\",
@@ -38,6 +40,8 @@ exports[`PrismaParser Identify multiple columns 1`] = `
 exports[`PrismaParser Identify optional columns 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [],
+    \\"generators\\": [],
     \\"models\\": [
         {
             \\"type\\": \\"model\\",
@@ -73,6 +77,8 @@ exports[`PrismaParser Identify optional columns 1`] = `
 exports[`PrismaParser Identify reference type column correctly 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [],
+    \\"generators\\": [],
     \\"models\\": [
         {
             \\"type\\": \\"model\\",
@@ -135,6 +141,8 @@ exports[`PrismaParser Identify reference type column correctly 1`] = `
 exports[`PrismaParser Parses model and primitive type columns correctly 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [],
+    \\"generators\\": [],
     \\"models\\": [
         {
             \\"type\\": \\"model\\",
