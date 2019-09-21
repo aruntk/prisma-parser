@@ -23,6 +23,14 @@
     }
     return dataType
   }
+  function processDeclarations(d) {
+    const declarationObj = {}
+    for (let i = 0; i < d.length; i += 1)  {
+      const declaration = d[i]
+      declarationObj[declaration.name] = declaration.init
+    }
+    return declarationObj
+  }
 }
 Start
  = PrismaQL
@@ -56,7 +64,7 @@ GeneratorItem
    return {
      name,
      type: prefix,
-     declarations,
+     declarations: processDeclarations(declarations),
    }
  }
 
@@ -66,7 +74,7 @@ DatasourceItem
    return {
      name,
      type: prefix,
-     declarations,
+     declarations: processDeclarations(declarations),
    }
  }
 
