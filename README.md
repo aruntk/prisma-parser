@@ -9,11 +9,33 @@
 
 `yarn start`
 
+## Test
+
+`yarn jest`
+
 
 
 ## Input
 
 ```
+datasource db1 {
+  provider = "mysql"
+  url = "mysql://localhost:3306"
+}
+
+datasource db2 {
+  provider = "postgresql"
+  url = "postgresql://localhost:5432"
+}
+datasource db3 {
+  provider = "sqlite"
+  url = "file:dev.db"
+  enabled = true
+}
+
+generator photon {
+  provider = "photonjs"
+}
 model User {
   id     Int @id
   name   String
@@ -28,16 +50,102 @@ model Post {
   content  String
   author   User
 }
+
 ```
 
 ## Output
 
 ```
+
 {
     "type": "PrismaQL",
+    "datasources": [
+        {
+            "name": "db1",
+            "type": "datasource",
+            "declarations": [
+                {
+                    "name": "provider",
+                    "init": {
+                        "type": "Literal",
+                        "value": "mysql"
+                    }
+                },
+                {
+                    "name": "url",
+                    "init": {
+                        "type": "Literal",
+                        "value": "mysql://localhost:3306"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "db2",
+            "type": "datasource",
+            "declarations": [
+                {
+                    "name": "provider",
+                    "init": {
+                        "type": "Literal",
+                        "value": "postgresql"
+                    }
+                },
+                {
+                    "name": "url",
+                    "init": {
+                        "type": "Literal",
+                        "value": "postgresql://localhost:5432"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "db3",
+            "type": "datasource",
+            "declarations": [
+                {
+                    "name": "provider",
+                    "init": {
+                        "type": "Literal",
+                        "value": "sqlite"
+                    }
+                },
+                {
+                    "name": "url",
+                    "init": {
+                        "type": "Literal",
+                        "value": "file:dev.db"
+                    }
+                },
+                {
+                    "name": "enabled",
+                    "init": {
+                        "type": "Literal",
+                        "value": "true"
+                    }
+                }
+            ]
+        }
+    ],
+    "generators": [
+        {
+            "name": "photon",
+            "type": "generator",
+            "declarations": [
+                {
+                    "name": "provider",
+                    "init": {
+                        "type": "Literal",
+                        "value": "photonjs"
+                    }
+                }
+            ]
+        }
+    ],
     "models": [
         {
-            "type": "Model",
+            "type": "model",
             "name": "User",
             "columns": [
                 {
@@ -94,7 +202,7 @@ model Post {
             ]
         },
         {
-            "type": "Model",
+            "type": "model",
             "name": "Post",
             "columns": [
                 {
