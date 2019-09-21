@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PrismaParser Identify multiple columns 1`] = `
+exports[`PrismaParser Identifies multiple columns 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
     \\"datasources\\": [],
@@ -37,7 +37,7 @@ exports[`PrismaParser Identify multiple columns 1`] = `
 }"
 `;
 
-exports[`PrismaParser Identify optional columns 1`] = `
+exports[`PrismaParser Identifies optional columns 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
     \\"datasources\\": [],
@@ -74,7 +74,7 @@ exports[`PrismaParser Identify optional columns 1`] = `
 }"
 `;
 
-exports[`PrismaParser Identify reference type column correctly 1`] = `
+exports[`PrismaParser Identifies reference type column correctly 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
     \\"datasources\\": [],
