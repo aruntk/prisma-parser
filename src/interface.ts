@@ -1,11 +1,11 @@
 export interface IDeclarationInit {
-  type: 'Literal' | 'Reference',
+  type: 'Literal' | 'Reference'
   value: string | boolean | number
   raw: string
 }
 
 export interface IDatasourceDeclaration {
-  name: 'provider' | 'url' |  'enabled'
+  name: 'provider' | 'url' | 'enabled'
   init: IDeclarationInit
 }
 
@@ -31,7 +31,7 @@ export interface IGenerator {
 export type IDefaultDataTypes = 'String' | 'Boolean' | 'Int' | 'Float' | 'Datetime'
 
 export interface IPrimitiveDataType {
-  name: IDefaultDataTypes,
+  name: IDefaultDataTypes
   type: 'PrimitiveType'
 }
 
@@ -53,13 +53,13 @@ export interface IColumn {
 }
 
 export interface IModel {
-  type: 'model',
-  name: 'user',
+  type: 'model'
+  name: 'user'
   columns: IColumn[]
 }
 
 export interface IPrismaAST {
-  type: 'PrismaQL',
+  type: 'PrismaQL'
   datasources?: IDatasource[]
   generators?: IGenerator[]
   models: IModel[]

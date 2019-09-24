@@ -8,7 +8,7 @@ const equalChar = '='
 const propertyIdentifierChar = '@'
 
 const getWhiteSpaceStr = (length: number) => {
-  return (new Array(length).fill(' ')).join('')
+  return new Array(length).fill(' ').join('')
 }
 
 const processDeclaration = (declaration: IDeclaration) => {
@@ -17,10 +17,10 @@ const processDeclaration = (declaration: IDeclaration) => {
     getWhiteSpaceStr(2),
     declaration.name,
     getWhiteSpaceStr(1),
-    equalChar, 
+    equalChar,
     getWhiteSpaceStr(1),
     declaration.init.raw,
-    newLineChar
+    newLineChar,
   ]
   return out.join('')
 }
@@ -61,12 +61,7 @@ const processColumnProperties = (property: IColumnProperty) => {
 }
 
 const processColumn = (column: IColumn) => {
-  const out = [
-    getWhiteSpaceStr(2),
-    column.name,
-    getWhiteSpaceStr(1),
-    column.data_type.name
-  ]
+  const out = [getWhiteSpaceStr(2), column.name, getWhiteSpaceStr(1), column.data_type.name]
   if (column.optional) {
     out.push('?')
   }
@@ -90,7 +85,7 @@ const processModel = (model: IModel) => {
     scopeStartChar,
     newLineChar,
     ...model.columns.map(processColumn),
-    scopeEndChar
+    scopeEndChar,
   ]
   return out.join('')
 }
