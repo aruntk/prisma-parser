@@ -78,7 +78,8 @@ Declaration
      name: left,
      init: {
        type: 'Literal',
-       value: right
+       value: right.value,
+       raw: right.raw
      }
    }
  }
@@ -132,11 +133,23 @@ GeneratorPrefix
 
 String
  = '"' chars: ([^\n\r\f\"])* '"'
- { return chars.join("") }
+ {
+   const value = chars.join("")
+   return {
+     value: value,
+     raw: '"' + value + '"'
+   }
+ }
 
 Boolean
  = b:("true" / "false")
- { return b === "true" }
+{
+  const value = b === "true"
+  return {
+    value: value,
+    raw: b
+  }
+}
 
 Name
  = AlphanumericWord

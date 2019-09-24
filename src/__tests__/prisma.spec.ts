@@ -7,7 +7,7 @@ describe('PrismaParser', () => {
       id     Int @id
       name   String
     }`
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
   it('Identifies reference type column correctly', async () => {
@@ -22,7 +22,7 @@ describe('PrismaParser', () => {
       author   User
     }
     `
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
   it('Identifies multiple columns', async () => {
@@ -32,7 +32,7 @@ describe('PrismaParser', () => {
       name   String[]
     }
     `
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
 
@@ -43,7 +43,7 @@ describe('PrismaParser', () => {
       name   String?
     }
     `
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
 
@@ -62,7 +62,7 @@ describe('PrismaParser', () => {
       url = "file:dev.db"
       enabled = true
     }`
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
   it('Parses generator correctly', async () => {
@@ -70,7 +70,7 @@ describe('PrismaParser', () => {
       provider = "photonjs"
     }
     `
-    const tree = parser.print(parser.parse(schema))
+    const tree = JSON.stringify(parser.parse(schema))
     expect(tree).toMatchSnapshot()
   })
 })

@@ -1,6 +1,7 @@
 import * as pegjs from 'pegjs'
 import grammar from './grammar'
+import { IPrismaAST } from './interface'
+import printer from './printer'
 
 const parser = pegjs.generate(grammar)
-const print = (tree: any) => JSON.stringify(tree, null, 4)
-export default { parse: parser.parse, print, SyntaxError: parser.SyntaxError }
+export default { parse: (prismaQL: string): IPrismaAST  => parser.parse(prismaQL), print: printer, SyntaxError: parser.SyntaxError }
