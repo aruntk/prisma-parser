@@ -56,4 +56,21 @@ describe('PrismaParser', () => {
     `
     expect(() => parser.parse(schema)).toThrowError('Data type Post is undefined')
   })
+  it('Parses datasource correctly', async () => {
+    const schema = `datasource db3 {
+      provider = "sqlite"
+      url = "file:dev.db"
+      enabled = true
+    }`
+    const tree = parser.print(parser.parse(schema))
+    expect(tree).toMatchSnapshot()
+  })
+  it('Parses generator correctly', async () => {
+    const schema = `generator photon {
+      provider = "photonjs"
+    }
+    `
+    const tree = parser.print(parser.parse(schema))
+    expect(tree).toMatchSnapshot()
+  })
 })

@@ -138,6 +138,66 @@ exports[`PrismaParser Identifies reference type column correctly 1`] = `
 }"
 `;
 
+exports[`PrismaParser Parses datasource correctly 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [
+        {
+            \\"name\\": \\"db3\\",
+            \\"type\\": \\"datasource\\",
+            \\"declarations\\": [
+                {
+                    \\"name\\": \\"provider\\",
+                    \\"init\\": {
+                        \\"type\\": \\"Literal\\",
+                        \\"value\\": \\"sqlite\\"
+                    }
+                },
+                {
+                    \\"name\\": \\"url\\",
+                    \\"init\\": {
+                        \\"type\\": \\"Literal\\",
+                        \\"value\\": \\"file:dev.db\\"
+                    }
+                },
+                {
+                    \\"name\\": \\"enabled\\",
+                    \\"init\\": {
+                        \\"type\\": \\"Literal\\",
+                        \\"value\\": true
+                    }
+                }
+            ]
+        }
+    ],
+    \\"generators\\": [],
+    \\"models\\": []
+}"
+`;
+
+exports[`PrismaParser Parses generator correctly 1`] = `
+"{
+    \\"type\\": \\"PrismaQL\\",
+    \\"datasources\\": [],
+    \\"generators\\": [
+        {
+            \\"name\\": \\"photon\\",
+            \\"type\\": \\"generator\\",
+            \\"declarations\\": [
+                {
+                    \\"name\\": \\"provider\\",
+                    \\"init\\": {
+                        \\"type\\": \\"Literal\\",
+                        \\"value\\": \\"photonjs\\"
+                    }
+                }
+            ]
+        }
+    ],
+    \\"models\\": []
+}"
+`;
+
 exports[`PrismaParser Parses model and primitive type columns correctly 1`] = `
 "{
     \\"type\\": \\"PrismaQL\\",
