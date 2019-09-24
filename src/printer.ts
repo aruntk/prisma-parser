@@ -90,14 +90,14 @@ const processModel = (model: IModel) => {
   return out.join('')
 }
 
-const printer = (tree: IPrismaAST, doNotPrint: boolean = false) => {
+const printer = (tree: IPrismaAST, logToConsole: boolean = true) => {
   const { datasources = [], generators = [], models } = tree
   const datasourceOut = datasources.map(processDatasource)
   const generatorsOut = generators.map(processGenerator)
   const modelsOut = models.map(processModel)
   const out = [...datasourceOut, ...generatorsOut, ...modelsOut]
   const printStr = out.join(newLineChar)
-  if (!doNotPrint) {
+  if (logToConsole) {
     log(printStr)
   }
   return printStr
