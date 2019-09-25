@@ -51,11 +51,13 @@ export type IDefaultDataTypes = 'String' | 'Boolean' | 'Int' | 'Float' | 'Dateti
 export interface IPrimitiveDataType {
   name: IDefaultDataTypes
   type: 'PrimitiveType'
+  raw: string
 }
 
 export interface IReferenceDataType {
   name: string
   type: 'ReferenceType'
+  raw: string
 }
 
 // TODO: more types to be added

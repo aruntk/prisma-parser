@@ -1,4 +1,4 @@
-import { IColumn, IColumnProperty, IDatasource, IDeclaration, IGenerator, IModel, IPrismaAST } from './interface'
+import { IColumn, IColumnProperty, IDatasource, IDeclaration, IGenerator, ILocation, IModel, IPrismaAST } from './interface'
 import { log } from './utils/log'
 
 const scopeStartChar = '{'
@@ -11,18 +11,59 @@ const getWhiteSpaceStr = (length: number) => {
   return new Array(length).fill(' ').join('')
 }
 
+interface IOutStrWithLocation {
+  text: string 
+  location: ILocation
+}
+
+const convertStrToLocationObj = (element: IOutStrWithLocation | string, offset: number = 0) => {
+  if (typeof element === 'string') {
+    return {
+      location: {
+        end: {
+          column: offset + element.length,
+          line: NaN,
+          offset: NaN,
+        },
+        start: {
+          column: offset,
+          line: NaN,
+          offset: NaN,
+        },
+      },
+      text: element,
+    }
+  }
+  return element
+}
+
+const joinOut = (out: Array<IOutStrWithLocation | string>, joinChar: string = '') => {
+  const outObj = out.reduce((a, b, i) => {
+    const first = convertStrToLocationObj(a)
+    const next = convertStrToLocationObj(b, first.location.end.column)
+    const firstIndent = i === 1 ? getWhiteSpaceStr(first.location.start.column - 1) : ''
+    return {
+      location: next.location,
+      text: [
+        firstIndent,
+        first.text,
+        getWhiteSpaceStr(next.location.start.column - first.location.end.column),
+        next.text
+      ].join(joinChar),
+    }
+  })
+  return typeof outObj !== 'string' ? outObj.text: outObj
+}
+
 const processDeclaration = (declaration: IDeclaration) => {
   // TODO: padding needs to be derived from saved location information
   const out = [
-    getWhiteSpaceStr(declaration.nameLocation.start.column - 1),
-    declaration.name,
-    getWhiteSpaceStr(declaration.declarationIdentifierLocation.start.column - declaration.nameLocation.end.column),
-    equalChar,
-    getWhiteSpaceStr(declaration.init.location.start.column - declaration.declarationIdentifierLocation.end.column),
-    declaration.init.raw,
+    { text: declaration.name, location: declaration.nameLocation },
+    { text: equalChar, location: declaration.declarationIdentifierLocation },
+    { text: declaration.init.raw, location: declaration.init.location },
     newLineChar,
   ]
-  return out.join('')
+  return joinOut(out)
 }
 
 const processDatasource = (datasource: IDatasource) => {
@@ -61,26 +102,18 @@ const processColumnProperties = (property: IColumnProperty) => {
 }
 
 const processColumn = (column: IColumn) => {
-  const out = [
-    getWhiteSpaceStr(column.nameLocation.start.column - 1),
-    column.name,
-    getWhiteSpaceStr(column.dataTypeLocation.start.column - column.nameLocation.end.column),
-    column.dataType.name,
+  const out: Array<IOutStrWithLocation | string> = [
+    { text: column.name, location: column.nameLocation },
+    { text: column.dataType.raw, location: column.dataTypeLocation },
   ]
-  if (column.optional) {
-    out.push('?')
-  }
-  if (column.multiple) {
-    out.push('[]')
-  }
-  if (column.propertiesLocation) {
-    out.push(getWhiteSpaceStr(column.propertiesLocation.start.column - column.dataTypeLocation.end.column))
-  }
-  if (column.primaryKey) {
-    out.push(processColumnProperties('id'))
+  if (column.primaryKey && column.propertiesLocation) {
+    out.push({
+      location: column.propertiesLocation,
+      text: processColumnProperties('id'),
+    })
   }
   out.push(newLineChar)
-  return out.join('')
+  return joinOut(out)
 }
 
 const processModel = (model: IModel) => {

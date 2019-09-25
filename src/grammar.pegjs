@@ -225,7 +225,10 @@ DataType
  = t: Word list: ListIdentifier? optional: Optional?
  {
    return {
-     type: processDataTypes(t),
+     type: {
+       raw: [t, list, optional].join(''),
+       ...processDataTypes(t)
+     },
      optional: !!optional,
      multiple: !!list,
      location: location()
