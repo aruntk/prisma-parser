@@ -85,7 +85,6 @@ const joinLines = (out: ITextWithLocationArr): IOutStrWithLocation => {
 }
 
 const processDeclaration = (declaration: IDeclaration): IOutStrWithLocation => {
-  // TODO: padding needs to be derived from saved location information
   const out = [
     { text: declaration.name, location: declaration.nameLocation },
     { text: equalChar, location: declaration.declarationIdentifierLocation },
@@ -95,7 +94,6 @@ const processDeclaration = (declaration: IDeclaration): IOutStrWithLocation => {
 }
 
 const processDatasource = (datasource: IDatasource) => {
-  // TODO: padding needs to be derived from saved location information
   const words = [
     { text: datasource.type, location: datasource.typeLocation },
     { text: datasource.name, location: datasource.nameLocation },
@@ -111,7 +109,6 @@ const processDatasource = (datasource: IDatasource) => {
 
 // same as processDatasource, declared again in case processGenerator becomes get different behaviours in future
 const processGenerator = (generator: IGenerator) => {
-  // TODO: padding needs to be derived from saved location information
   const words = [
     { text: generator.type, location: generator.typeLocation },
     { text: generator.name, location: generator.nameLocation },
@@ -144,7 +141,6 @@ const processColumn = (column: IColumn) => {
 }
 
 const processModel = (model: IModel) => {
-  // TODO: padding needs to be derived from saved location information
   const words = [
     { text: model.type, location: model.typeLocation },
     { text: model.name, location: model.nameLocation },
