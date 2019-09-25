@@ -155,8 +155,6 @@ model Post {
                         "name": "Int",
                         "type": "PrimitiveType"
                     },
-                    "optional": false,
-                    "multiple": false,
                     "primaryKey": true
                 },
                 {
@@ -165,9 +163,7 @@ model Post {
                     "data_type": {
                         "name": "String",
                         "type": "PrimitiveType"
-                    },
-                    "optional": false,
-                    "multiple": false
+                    }
                 },
                 {
                     "type": "Column",
@@ -175,9 +171,7 @@ model Post {
                     "data_type": {
                         "name": "String",
                         "type": "PrimitiveType"
-                    },
-                    "optional": false,
-                    "multiple": false
+                    }
                 },
                 {
                     "type": "Column",
@@ -186,8 +180,7 @@ model Post {
                         "name": "Int",
                         "type": "PrimitiveType"
                     },
-                    "optional": true,
-                    "multiple": false
+                    "optional": true
                 },
                 {
                     "type": "Column",
@@ -196,7 +189,6 @@ model Post {
                         "name": "Post",
                         "type": "ReferenceType"
                     },
-                    "optional": false,
                     "multiple": true
                 }
             ]
@@ -212,8 +204,6 @@ model Post {
                         "name": "Int",
                         "type": "PrimitiveType"
                     },
-                    "optional": false,
-                    "multiple": false,
                     "primaryKey": true
                 },
                 {
@@ -222,9 +212,7 @@ model Post {
                     "data_type": {
                         "name": "String",
                         "type": "PrimitiveType"
-                    },
-                    "optional": false,
-                    "multiple": false
+                    }
                 },
                 {
                     "type": "Column",
@@ -232,9 +220,7 @@ model Post {
                     "data_type": {
                         "name": "String",
                         "type": "PrimitiveType"
-                    },
-                    "optional": false,
-                    "multiple": false
+                    }
                 },
                 {
                     "type": "Column",
@@ -242,9 +228,7 @@ model Post {
                     "data_type": {
                         "name": "User",
                         "type": "ReferenceType"
-                    },
-                    "optional": false,
-                    "multiple": false
+                    }
                 }
             ]
         }
