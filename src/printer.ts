@@ -1,33 +1,50 @@
-import { IColumn, IColumnProperty, IDatasource, IDeclaration, IGenerator, ILocation, IModel, IPrismaAST } from './interface'
+import {
+  IColumn,
+  IColumnProperty,
+  IDatasource,
+  IDeclaration,
+  IGenerator,
+  ILocation,
+  IModel,
+  IPrismaAST,
+} from './interface'
 import { log } from './utils/log'
 
 const scopeStartChar = '{'
 const scopeEndChar = '}'
 const newLineChar = '\n'
+const spaceChar = ' '
 const equalChar = '='
 const propertyIdentifierChar = '@'
 
 const getWhiteSpaceStr = (length: number) => {
-  return new Array(length).fill(' ').join('')
+  return new Array(length).fill(spaceChar).join('')
+}
+
+const getNewLineStr = (length: number) => {
+  return new Array(length).fill(newLineChar).join('')
 }
 
 interface IOutStrWithLocation {
-  text: string 
+  text: string
   location: ILocation
 }
 
-const convertStrToLocationObj = (element: IOutStrWithLocation | string, offset: number = 0) => {
+type ITextWithLocation = IOutStrWithLocation | string
+type ITextWithLocationArr = ITextWithLocation[]
+
+const convertStrToLocationObj = (element: ITextWithLocation, leftOffset: number = 0, topOffset: number = 0) => {
   if (typeof element === 'string') {
     return {
       location: {
         end: {
-          column: offset + element.length,
-          line: NaN,
+          column: leftOffset + element.length,
+          line: topOffset,
           offset: NaN,
         },
         start: {
-          column: offset,
-          line: NaN,
+          column: leftOffset,
+          line: topOffset,
           offset: NaN,
         },
       },
@@ -37,10 +54,10 @@ const convertStrToLocationObj = (element: IOutStrWithLocation | string, offset: 
   return element
 }
 
-const joinOut = (out: Array<IOutStrWithLocation | string>, joinChar: string = '') => {
+const joinWords = (out: ITextWithLocationArr): IOutStrWithLocation => {
   const outObj = out.reduce((a, b, i) => {
     const first = convertStrToLocationObj(a)
-    const next = convertStrToLocationObj(b, first.location.end.column)
+    const next = convertStrToLocationObj(b, first.location.end.column, first.location.end.line)
     const firstIndent = i === 1 ? getWhiteSpaceStr(first.location.start.column - 1) : ''
     return {
       location: next.location,
@@ -48,53 +65,64 @@ const joinOut = (out: Array<IOutStrWithLocation | string>, joinChar: string = ''
         firstIndent,
         first.text,
         getWhiteSpaceStr(next.location.start.column - first.location.end.column),
-        next.text
-      ].join(joinChar),
+        next.text,
+      ].join(''),
     }
   })
-  return typeof outObj !== 'string' ? outObj.text: outObj
+  return convertStrToLocationObj(outObj)
 }
 
-const processDeclaration = (declaration: IDeclaration) => {
+const joinLines = (out: ITextWithLocationArr): IOutStrWithLocation => {
+  const outObj = out.reduce((a, b) => {
+    const first = convertStrToLocationObj(a)
+    const next = convertStrToLocationObj(b, first.location.end.column, first.location.end.line)
+    return {
+      location: next.location,
+      text: [first.text, getNewLineStr(next.location.start.line - first.location.end.line), next.text].join(''),
+    }
+  })
+  return convertStrToLocationObj(outObj)
+}
+
+const processDeclaration = (declaration: IDeclaration): IOutStrWithLocation => {
   // TODO: padding needs to be derived from saved location information
   const out = [
     { text: declaration.name, location: declaration.nameLocation },
     { text: equalChar, location: declaration.declarationIdentifierLocation },
     { text: declaration.init.raw, location: declaration.init.location },
-    newLineChar,
   ]
-  return joinOut(out)
+  return joinWords(out)
 }
 
 const processDatasource = (datasource: IDatasource) => {
   // TODO: padding needs to be derived from saved location information
-  const out = [
-    datasource.type,
-    getWhiteSpaceStr(1),
-    datasource.name,
-    getWhiteSpaceStr(1),
-    scopeStartChar,
-    newLineChar,
-    ...datasource.declarations.map(processDeclaration),
-    scopeEndChar,
+  const words = [
+    { text: datasource.type, location: datasource.typeLocation },
+    { text: datasource.name, location: datasource.nameLocation },
+    { text: scopeStartChar, location: datasource.scopeStartLocation },
   ]
-  return out.join('')
+  const lines = [
+    joinWords(words),
+    ...datasource.declarations.map(processDeclaration),
+    { text: scopeEndChar, location: datasource.scopeEndLocation },
+  ]
+  return lines
 }
 
 // same as processDatasource, declared again in case processGenerator becomes get different behaviours in future
 const processGenerator = (generator: IGenerator) => {
   // TODO: padding needs to be derived from saved location information
-  const out = [
-    generator.type,
-    getWhiteSpaceStr(1),
-    generator.name,
-    getWhiteSpaceStr(1),
-    scopeStartChar,
-    newLineChar,
-    ...generator.declarations.map(processDeclaration),
-    scopeEndChar,
+  const words = [
+    { text: generator.type, location: generator.typeLocation },
+    { text: generator.name, location: generator.nameLocation },
+    { text: scopeStartChar, location: generator.scopeStartLocation },
   ]
-  return out.join('')
+  const lines = [
+    joinWords(words),
+    ...generator.declarations.map(processDeclaration),
+    { text: scopeEndChar, location: generator.scopeEndLocation },
+  ]
+  return lines
 }
 
 const processColumnProperties = (property: IColumnProperty) => {
@@ -102,7 +130,7 @@ const processColumnProperties = (property: IColumnProperty) => {
 }
 
 const processColumn = (column: IColumn) => {
-  const out: Array<IOutStrWithLocation | string> = [
+  const out: ITextWithLocationArr = [
     { text: column.name, location: column.nameLocation },
     { text: column.dataType.raw, location: column.dataTypeLocation },
   ]
@@ -112,32 +140,40 @@ const processColumn = (column: IColumn) => {
       text: processColumnProperties('id'),
     })
   }
-  out.push(newLineChar)
-  return joinOut(out)
+  return joinWords(out)
 }
 
 const processModel = (model: IModel) => {
   // TODO: padding needs to be derived from saved location information
-  const out = [
-    model.type,
-    getWhiteSpaceStr(1),
-    model.name,
-    getWhiteSpaceStr(1),
-    scopeStartChar,
-    newLineChar,
-    ...model.columns.map(processColumn),
-    scopeEndChar,
+  const words = [
+    { text: model.type, location: model.typeLocation },
+    { text: model.name, location: model.nameLocation },
+    { text: scopeStartChar, location: model.scopeStartLocation },
   ]
-  return out.join('')
+  const lines = [
+    joinWords(words),
+    ...model.columns.map(processColumn),
+    { text: scopeEndChar, location: model.scopeEndLocation },
+  ]
+  return lines
 }
 
 const printer = (tree: IPrismaAST, logToConsole: boolean = true) => {
   const { datasources = [], generators = [], models } = tree
-  const datasourceOut = datasources.map(processDatasource)
-  const generatorsOut = generators.map(processGenerator)
-  const modelsOut = models.map(processModel)
-  const out = [...datasourceOut, ...generatorsOut, ...modelsOut]
-  const printStr = out.join(newLineChar)
+  const lines: ITextWithLocationArr = []
+  datasources.map(datasource => {
+    const datasourceLines = processDatasource(datasource)
+    lines.push(...datasourceLines)
+  })
+  generators.map(generator => {
+    const generatorLines = processGenerator(generator)
+    lines.push(...generatorLines)
+  })
+  models.map(model => {
+    const modelLines = processModel(model)
+    lines.push(...modelLines)
+  })
+  const printStr = joinLines(lines).text
   if (logToConsole) {
     log(printStr)
   }

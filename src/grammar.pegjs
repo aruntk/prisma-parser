@@ -51,25 +51,29 @@ DatasourceList
  }
 
 GeneratorItem
- = _? prefix: GeneratorPrefix _ name:Name _ ScopeStart nl* declarations:Declaration* _? ScopeEnd nl* _?
+ = _? prefix: GeneratorPrefix _ name:Name _ scope_start: ScopeStart nl* declarations:Declaration* _? scope_end: ScopeEnd nl* _?
  {
    return {
      name: name.name,
      nameLocation: name.location,
      type: prefix.type,
      typeLocation: prefix.location,
+     scopeStartLocation: scope_start.location,
+     scopeEndLocation: scope_end.location,
      declarations,
    }
  }
 
 DatasourceItem
- = _? prefix: DatasourcePrefix _ name:Name _ ScopeStart _? nl* declarations:Declaration* _? ScopeEnd nl* _?
+ = _? prefix: DatasourcePrefix _ name:Name _ scope_start: ScopeStart _? nl* declarations:Declaration* _? scope_end: ScopeEnd nl* _?
  {
    return {
      name: name.name,
      nameLocation: name.location,
      type: prefix.type,
      typeLocation: prefix.location,
+     scopeStartLocation: scope_start.location,
+     scopeEndLocation: scope_end.location,
      declarations,
    }
  }
@@ -108,13 +112,15 @@ ModelList
  }
 
 ModelItem
- = _? prefix: ModelPrefix _ name: Name _ ScopeStart _? nl* columns: Column* _? ScopeEnd nl* _?
+ = _? prefix: ModelPrefix _ name: Name _ scope_start: ScopeStart _? nl* columns: Column* _? scope_end: ScopeEnd nl* _?
  {
    return {
     type: prefix.type,
     typeLocation: prefix.location,
     name: name.name,
     nameLocation: name.location,
+    scopeStartLocation: scope_start.location,
+    scopeEndLocation: scope_end.location,
     columns
    };
  }
@@ -151,8 +157,8 @@ Properties
 Property
  = PropertyIdentifier name: Name
  {
-   var property = {}
-   var n = name.name
+   const property = {}
+   const n = name.name
    switch(n) {
      case 'id':
        property['primaryKey'] = true
@@ -242,10 +248,23 @@ ListIdentifier
  = "[]"
 
 ScopeStart
- = [\{]
+ = text: [\{]
+ {
+   return {
+     text,
+     location: location()
+   }
+ }
+
 
 ScopeEnd
- = [\}]
+ = text: [\}]
+ {
+   return {
+     text,
+     location: location()
+   }
+ }
 
 DeclarationIdentifier
  = "="

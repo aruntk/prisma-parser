@@ -29,6 +29,8 @@ export interface IDatasource {
   nameLocation: ILocation
   type: 'datasource'
   typeLocation: ILocation
+  scopeStartLocation: ILocation
+  scopeEndLocation: ILocation
   declarations: IDatasourceDeclaration[]
 }
 
@@ -43,6 +45,8 @@ export interface IGenerator {
   typeLocation: ILocation
   name: string
   nameLocation: ILocation
+  scopeStartLocation: ILocation
+  scopeEndLocation: ILocation
   declarations: IGeneratorDeclaration[]
 }
 
@@ -78,6 +82,10 @@ export interface IColumn {
 export interface IModel {
   type: 'model'
   name: string
+  typeLocation: ILocation
+  nameLocation: ILocation
+  scopeStartLocation: ILocation
+  scopeEndLocation: ILocation
   columns: IColumn[]
 }
 

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PrismaPrinter Prints ast -> schema correctly 1`] = `
+exports[`PrismaPrinter Prints ast -> schema correctly for a complete example 1`] = `
 "datasource db1 {
   provider = \\"mysql\\"
   url = \\"mysql://localhost:3306\\"
@@ -29,5 +29,45 @@ model Post {
   title    String
   content  String
   author   User
+}"
+`;
+
+exports[`PrismaPrinter Prints indentation correctly 1`] = `
+"    model User    {
+          id     Int   @id
+name   String
+}"
+`;
+
+exports[`PrismaPrinter Prints multiple new lines between columns correctly 1`] = `
+"model User {
+  id Int @id
+
+
+  name String
+}"
+`;
+
+exports[`PrismaPrinter Prints multiple new lines between declarations correctly 1`] = `
+"datasource db1 {
+  provider = \\"mysql\\"
+
+
+
+  url = \\"mysql://localhost:3306\\"
+}"
+`;
+
+exports[`PrismaPrinter Prints multiple new lines between scopes correctly 1`] = `
+"datasource db1 {
+  provider = \\"mysql\\"
+  url = \\"mysql://localhost:3306\\"
+}
+
+
+
+datasource db2 {
+  provider = \\"postgresql\\"
+  url = \\"postgresql://localhost:5432\\"
 }"
 `;
