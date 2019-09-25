@@ -14,11 +14,11 @@ const getWhiteSpaceStr = (length: number) => {
 const processDeclaration = (declaration: IDeclaration) => {
   // TODO: padding needs to be derived from saved location information
   const out = [
-    getWhiteSpaceStr(2),
+    getWhiteSpaceStr(declaration.nameLocation.start.column - 1),
     declaration.name,
-    getWhiteSpaceStr(1),
+    getWhiteSpaceStr(declaration.declarationIdentifierLocation.start.column - declaration.nameLocation.end.column),
     equalChar,
-    getWhiteSpaceStr(1),
+    getWhiteSpaceStr(declaration.init.location.start.column - declaration.declarationIdentifierLocation.end.column),
     declaration.init.raw,
     newLineChar,
   ]
@@ -57,16 +57,24 @@ const processGenerator = (generator: IGenerator) => {
 }
 
 const processColumnProperties = (property: IColumnProperty) => {
-  return `${getWhiteSpaceStr(1)}${propertyIdentifierChar}${property}`
+  return `${propertyIdentifierChar}${property}`
 }
 
 const processColumn = (column: IColumn) => {
-  const out = [getWhiteSpaceStr(2), column.name, getWhiteSpaceStr(1), column.data_type.name]
+  const out = [
+    getWhiteSpaceStr(column.nameLocation.start.column - 1),
+    column.name,
+    getWhiteSpaceStr(column.dataTypeLocation.start.column - column.nameLocation.end.column),
+    column.dataType.name,
+  ]
   if (column.optional) {
     out.push('?')
   }
   if (column.multiple) {
     out.push('[]')
+  }
+  if (column.propertiesLocation) {
+    out.push(getWhiteSpaceStr(column.propertiesLocation.start.column - column.dataTypeLocation.end.column))
   }
   if (column.primaryKey) {
     out.push(processColumnProperties('id'))

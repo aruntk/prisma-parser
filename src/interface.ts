@@ -1,30 +1,48 @@
+export interface ICoordinate {
+  offset: number
+  line: number
+  column: number
+}
+export interface ILocation {
+  start: ICoordinate
+  end: ICoordinate
+}
+
 export interface IDeclarationInit {
   type: 'Literal' | 'Reference'
   value: string | boolean | number
   raw: string
+  location: ILocation
 }
 
-export interface IDatasourceDeclaration {
-  name: 'provider' | 'url' | 'enabled'
+export interface IDeclarationBase {
+  nameLocation: ILocation
+  declarationIdentifierLocation: ILocation
   init: IDeclarationInit
+}
+export interface IDatasourceDeclaration extends IDeclarationBase {
+  name: 'provider' | 'url' | 'enabled'
 }
 
 export interface IDatasource {
   name: string
+  nameLocation: ILocation
   type: 'datasource'
+  typeLocation: ILocation
   declarations: IDatasourceDeclaration[]
 }
 
-export interface IGeneratorDeclaration {
+export interface IGeneratorDeclaration extends IDeclarationBase {
   name: 'provider'
-  init: IDeclarationInit
 }
 
 export type IDeclaration = IDatasourceDeclaration | IGeneratorDeclaration
 
 export interface IGenerator {
   type: 'generator'
+  typeLocation: ILocation
   name: string
+  nameLocation: ILocation
   declarations: IGeneratorDeclaration[]
 }
 
@@ -46,15 +64,18 @@ export type IColumnProperty = 'id' | 'default'
 export interface IColumn {
   type: 'Column'
   name: string
-  data_type: IPrimitiveDataType | IReferenceDataType
+  nameLocation: ILocation
+  dataType: IPrimitiveDataType | IReferenceDataType
+  dataTypeLocation: ILocation
   optional?: boolean
   multiple?: boolean
   primaryKey?: boolean
+  propertiesLocation?: ILocation
 }
 
 export interface IModel {
   type: 'model'
-  name: 'user'
+  name: string
   columns: IColumn[]
 }
 

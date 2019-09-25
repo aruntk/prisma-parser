@@ -18,16 +18,16 @@ generator photon {
   provider = \\"photonjs\\"
 }
 model User {
-  id Int @id
-  name String
-  email String
-  age Int?
-  posts Post[]
+  id     Int @id
+  name   String
+  email  String
+  age    Int?
+  posts  Post[]
 }
 model Post {
-  id Int @id
-  title String
-  content String
-  author User
+  id       Int @id
+  title    String
+  content  String
+  author   User
 }"
 `;

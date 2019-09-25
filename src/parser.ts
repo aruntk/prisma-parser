@@ -7,5 +7,4 @@ const parser = pegjs.generate(grammar)
 export default {
   parse: (prismaQL: string): IPrismaAST => parser.parse(prismaQL),
   print: printer,
-  SyntaxError: parser.SyntaxError,
 }

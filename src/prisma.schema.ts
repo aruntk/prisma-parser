@@ -9,9 +9,9 @@ datasource db2 {
   url = "postgresql://localhost:5432"
 }
 datasource db3 {
-  provider = "sqlite"
-  url = "file:dev.db"
-  enabled = true
+  provider  = "sqlite"
+  url       = "file:dev.db"
+  enabled   = true
 }
 
 generator photon {

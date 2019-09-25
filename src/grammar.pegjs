@@ -51,36 +51,52 @@ DatasourceList
  }
 
 GeneratorItem
- = _? prefix: GeneratorPrefix _ name:Name _ ScopeStart nl* declarations:Declaration* ScopeEnd nl* _?
+ = _? prefix: GeneratorPrefix _ name:Name _ ScopeStart nl* declarations:Declaration* _? ScopeEnd nl* _?
  {
    return {
-     name,
-     type: prefix,
+     name: name.name,
+     nameLocation: name.location,
+     type: prefix.type,
+     typeLocation: prefix.location,
      declarations,
    }
  }
 
 DatasourceItem
- = _? prefix: DatasourcePrefix _ name:Name _ ScopeStart nl* declarations:Declaration* ScopeEnd nl* _?
+ = _? prefix: DatasourcePrefix _ name:Name _ ScopeStart _? nl* declarations:Declaration* _? ScopeEnd nl* _?
  {
    return {
-     name,
-     type: prefix,
+     name: name.name,
+     nameLocation: name.location,
+     type: prefix.type,
+     typeLocation: prefix.location,
      declarations,
    }
  }
 
 
 Declaration
- = _? left: Word _? DeclarationIdentifier _? right: (Boolean / String) _? nl*
+ = _? left: DeclarationName _? e: DeclarationIdentifier _? right: (Boolean / String) _? nl*
 {
    return {
-     name: left,
+     name: left.name,
+     nameLocation: left.location,
+     declarationIdentifierLocation: e.location,
      init: {
        type: 'Literal',
        value: right.value,
-       raw: right.raw
-     }
+       raw: right.raw,
+       location: right.location
+     },
+   }
+ }
+
+DeclarationName
+ = name: Word
+ {
+   return {
+     name,
+     location: location()
    }
  }
 
@@ -92,44 +108,87 @@ ModelList
  }
 
 ModelItem
- = _? prefix: ModelPrefix _ name: Name _ ScopeStart nl* columns: Column* ScopeEnd nl* _?
+ = _? prefix: ModelPrefix _ name: Name _ ScopeStart _? nl* columns: Column* _? ScopeEnd nl* _?
  {
-   return { type: prefix, name, columns };
+   return {
+    type: prefix.type,
+    typeLocation: prefix.location,
+    name: name.name,
+    nameLocation: name.location,
+    columns
+   };
  }
 
 Column
- = _? name: Name _ data_type: DataType list: ListIdentifier? optional: Optional? _? properties: Properties? _? nl*
+ = _? name: Name _ dataType: DataType _? properties: Properties? _? nl*
    {
-   const propertiesObj = Object.assign({}, ...(properties || []))
-   return { type: 'Column', name, data_type, optional: !!optional, multiple: !!list, ...propertiesObj } 
+   const propertiesArrObj = properties || {}
+   const propertiesObj = Object.assign({}, ...(propertiesArrObj.properties || []))
+   const propertiesLocationObj = propertiesArrObj.location ? { propertiesLocation: propertiesArrObj.location } : {}
+    return {
+      type: 'Column',
+      name: name.name,
+      nameLocation: name.location,
+      dataType: dataType.type,
+      dataTypeLocation: dataType.location,
+      optional: dataType.optional,
+      multiple: dataType.multiple,
+      ...propertiesLocationObj,
+      ...propertiesObj
+    }
  }
 
 
 Properties
  = p: Property*
+ {
+ return {
+    properties: p,
+    location: location()
+ }
+ }
 
 Property
  = PropertyIdentifier name: Name
- { 
+ {
    var property = {}
-   switch(name) {
+   var n = name.name
+   switch(n) {
      case 'id':
        property['primaryKey'] = true
      break
      default:
-       property[name] = true
+       property[n] = true
    }
    return property
  }
 
 ModelPrefix
- = "model"
+ = type: "model"
+ {
+   return {
+     type,
+     location: location()
+   }
+}
 
 DatasourcePrefix
- = "datasource"
+ = type: "datasource"
+{
+   return {
+     type,
+     location: location()
+   }
+ }
 
 GeneratorPrefix
- = "generator"
+ = type: "generator"
+{
+   return {
+     type,
+     location: location()
+   }
+}
 
 String
  = '"' chars: ([^\n\r\f\"])* '"'
@@ -137,7 +196,8 @@ String
    const value = chars.join("")
    return {
      value: value,
-     raw: '"' + value + '"'
+     raw: '"' + value + '"',
+     location: location()
    }
  }
 
@@ -147,17 +207,29 @@ Boolean
   const value = b === "true"
   return {
     value: value,
-    raw: b
+    raw: b,
+    location: location()
   }
 }
 
 Name
- = AlphanumericWord
+ = name: AlphanumericWord
+{
+  return {
+    name: name,
+    location: location()
+  }
+}
 
 DataType
- = t: Word
- { 
-   return processDataTypes(t) 
+ = t: Word list: ListIdentifier? optional: Optional?
+ {
+   return {
+     type: processDataTypes(t),
+     optional: !!optional,
+     multiple: !!list,
+     location: location()
+   }
  }
 
 Optional
@@ -174,6 +246,11 @@ ScopeEnd
 
 DeclarationIdentifier
  = "="
+ {
+ return {
+    location: location()
+ }
+ }
 
 Word
  = l:Letter+
@@ -199,7 +276,7 @@ nl
   / "\f"
 
 ws "Whitespace"
- = [ \t\r\n\f]
+ = [ \t]
 
 _ "One or more whitespaces"
  = ws+
