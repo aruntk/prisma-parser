@@ -1,10 +1,12 @@
 import * as pegjs from 'pegjs'
 import grammar from './grammar'
-import { IPrismaAST } from './interface'
+import { IParserOptions, IPrismaAST } from './interface'
 import printer from './printer'
 
 const parser = pegjs.generate(grammar)
 export default {
-  parse: (prismaQL: string): IPrismaAST => parser.parse(prismaQL),
+  parse: (prismaQL: string, _options?: IParserOptions): IPrismaAST => {
+    return parser.parse(prismaQL)
+  },
   print: printer,
 }

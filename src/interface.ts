@@ -95,3 +95,8 @@ export interface IPrismaAST {
   generators?: IGenerator[]
   models: IModel[]
 }
+
+export interface IParserOptions {
+  schemaVersion: '1'
+  locations: boolean
+}
